@@ -1,0 +1,37 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+import time
+
+driver = webdriver.Chrome()
+driver.implicitly_wait(5)
+driver.get("https://demo.automationtesting.in/WebTable.html")
+
+driver.implicitly_wait(10)
+more_menu = driver.find_element(By.XPATH, '/html/body/header/nav/div/div[2]/ul/li[9]/a')
+jquery_progressbar_option = driver.find_element(By.XPATH, '/html/body/header/nav/div/div[2]/ul/li[9]/ul/li[5]/a')
+
+actions = ActionChains(driver)
+actions.move_to_element(more_menu).click(jquery_progressbar_option).perform()
+
+wait = WebDriverWait(driver, 10)
+start_download_button = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/section/div[1]/div/div/button")))
+
+start_download_button.click()
+
+cancel_button = wait.until(EC.text_to_be_present_in_element((By.XPATH, "/html/body/div[1]/div[3]/div/button"), "Cancel Download"))
+
+driver.refresh()
+
+more_menu = driver.find_element(By.XPATH, '/html/body/header/nav/div/div[2]/ul/li[9]/a')
+jquery_progressbar_option = driver.find_element(By.XPATH,'/html/body/header/nav/div/div[2]/ul/li[9]/ul/li[5]/a')
+actions.move_to_element(more_menu).click(jquery_progressbar_option)
+
+start_download_button = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/section/div[1]/div/div/button"))).click()
+
+complete_text = wait.until(EC.text_to_be_present_in_element((By.XPATH, "/html/body/div[1]/div[2]/div[1]"), "Complete!"))
+
+
+driver.quit()
